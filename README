@@ -1,0 +1,4 @@
+created with 
+
+    grails create-app vendor-packaging-kb --profile=rest-api
+
