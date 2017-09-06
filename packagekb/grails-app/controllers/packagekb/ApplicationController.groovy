@@ -1,4 +1,4 @@
-package vendor.packaging.kb
+package packagekb
 
 import grails.core.GrailsApplication
 import grails.util.Environment

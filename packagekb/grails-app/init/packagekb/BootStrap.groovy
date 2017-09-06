@@ -1,4 +1,4 @@
-package vendor.packaging.kb
+package packagekb
 
 class BootStrap {
 

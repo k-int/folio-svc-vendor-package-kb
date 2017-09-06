@@ -11,7 +11,7 @@ buildscript {
 }
 
 version "0.1"
-group "vendor.packaging.kb"
+group "packagekb"
 
 apply plugin:"eclipse"
 apply plugin:"idea"

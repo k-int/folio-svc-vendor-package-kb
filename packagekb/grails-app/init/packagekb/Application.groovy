@@ -1,4 +1,4 @@
-package vendor.packaging.kb
+package packagekb
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
