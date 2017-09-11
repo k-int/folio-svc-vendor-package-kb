@@ -26,10 +26,9 @@ class PackageOnboarding1Spec extends GebSpec {
             // File package_file = new File('src/integration-test/resources/elsevier_Global_Backfile Package - Computer Science 1995 [BFJCSC95]_2017-09-11_96497');
             // File package_file = PackageOnboarding1Spec.class.getClassLoader().getResource("/elsevier_Global_Backfile Package - Computer Science 1995 [BFJCSC95]_2017-09-11_96497 ").file
             // File package_file = Thread.currentThread().getContextClassLoader().getResource("/elsevier_Global_Backfile Package - Computer Science 1995 [BFJCSC95]_2017-09-11_96497 ").file
-            // File package_file = Thread.currentThread().getContextClassLoader().getResource("/file.tsv").file;
-            File package_file = Thread.currentThread().getContextClassLoader().getResource('integration-test/resources/file.tsv').file
+            File package_file = Thread.currentThread().getContextClassLoader().getResource("/file.tsv");
 
-            def resp = restBuilder().post("$baseUrl/package/elsevier/admin") {
+            def resp = rest.post("$baseUrl/package/elsevier/admin") {
               contentType "multipart/form-data"
               package_file = new File(package_file)
             }
