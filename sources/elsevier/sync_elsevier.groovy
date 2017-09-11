@@ -40,6 +40,7 @@ if ( cfg_file.exists() ) {
 else {
   config=[:]
   config.packageData=[:]
+  config.publish=false
 }
 
 println("Using config ${config}");
@@ -70,8 +71,11 @@ def pullLatest(config, url, cfg_file) {
   int page_count = 0;
   int package_count = 0;
 
-  def httpbuilder = new HTTPBuilder( 'http://localhost:8080' )
-  httpbuilder.auth.basic config.uploadUser, config.uploadPass
+  def httpbuilder = null;
+  if ( config.publish == true ) {
+    httpbuilder = new HTTPBuilder( 'http://localhost:8080' )
+    httpbuilder.auth.basic config.uploadUser, config.uploadPass
+  }
 
   while(next_page) {
     page_count++
@@ -110,20 +114,29 @@ def pullLatest(config, url, cfg_file) {
 }
 
 def processFile(official_package_name, link, config, http) {
-  def url_to_fecth = "http://holdings.sciencedirect.com/"+link.substring(3,link.length())
-  println("fetching ${official_package_name} - ${url_to_fecth}");
-  def package_data = new URL(url_to_fecth).getText()
 
-  def package_info = config.packageData[url_to_fecth]
+  def url_to_fetch = "http://holdings.sciencedirect.com/"+link.substring(3,link.length())
+  println("processFile ${official_package_name} - ${url_to_fetch}");
+
+  def package_id = url_to_fetch.substring(url_to_fetch.indexOf('=')+1,url_to_fetch.indexOf('&'));
+  println("Package ID: \"${package_id}\"");
+
+  if ( package_id == '' ) {
+    package_id = 'MasterList'
+  }
+
+  def package_info = config.packageData[url_to_fetch]
   def process_package = false;
 
   if ( package_info == null ) {
     package_info = [last_check:0,cksum:0]
-    config.packageData[url_to_fecth] = package_info
+    config.packageData[url_to_fetch] = package_info
     process_package = true
   }
 
   if (process_package) {
+
+    def package_data = new URL(url_to_fetch).getText()
 
     MessageDigest md5_digest = MessageDigest.getInstance("MD5");
     InputStream md5_is = new ByteArrayInputStream(package_data.getBytes());
@@ -141,17 +154,34 @@ def processFile(official_package_name, link, config, http) {
   
     println("Hash for ${link} is ${md5sumHex}");
   
-    if ( md5sumHex == config.packageData[url_to_fecth].cksum ) {
+    if ( md5sumHex == package_info.cksum ) {
       println("Checksum not changed - update last checked and continue");
-      config.packageData[url_to_fecth].last_check = System.currentTimeMillis()
+      package_info.last_check = System.currentTimeMillis()
     }
     else {
       println("Checksum changed - process file");
       // pushToGokb(official_package_name, package_data, http);
-      config.packageData[official_package_name].cksum = md5sumHex
-      config.packageData[official_package_name].last_check = System.currentTimeMillis()
+      package_info.cksum = md5sumHex
+      package_info.last_check = System.currentTimeMillis()
+
+      def ts_label = new java.text.SimpleDateFormat('yyyy.MM.dd_HHmmss').format(new Date());
+
+      // Put package data in cache
+      File cache_dir = new File('./package_cache')
+      if ( !cache_dir.exists() ) {
+        cache_dir.mkdir()
+      }
+
+      String cached_package_file_name = "./package_cache/${package_id}_${ts_label}".toString()
+      File cached_package_file = new File(cached_package_file_name)
+      package_info.cached_file = cached_package_file_name
+
+      cached_package_file << package_data
     }
 
+  }
+  else {
+    println("Skipping package ${package_id} - already registered, and date check not expired");
   }
 
 }
