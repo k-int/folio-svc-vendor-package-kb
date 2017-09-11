@@ -22,7 +22,7 @@ class PackageOnboarding1Spec extends GebSpec {
     void "Test the homepage"() {
         when:"The home page is requested"
 
-            File package_file =  grailsApplication.mainContext.getResource("elsevier_Global_Backfile Package - Computer Science 1995 [BFJCSC95]_2017-09-11_96497 ").file
+            File package_file =  getClass().getResource("elsevier_Global_Backfile Package - Computer Science 1995 [BFJCSC95]_2017-09-11_96497 ").file
 
             def resp = rest.post("$baseUrl/package/elsevier/admin") {
               contentType "multipart/form-data"

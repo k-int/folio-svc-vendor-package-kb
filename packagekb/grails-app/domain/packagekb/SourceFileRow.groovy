@@ -11,7 +11,6 @@ class SourceFileRow {
   SourceFile partOf
   String notes                            // Free text
   String access_type                      // Constrained [F|P]
-  String preceding_publication_title_id   // Publisher proprietary identifier
   String publication_type                 // Constrained [serial|monograph]
 
   // Journal only fields
@@ -66,7 +65,6 @@ class SourceFileRow {
     first_editor(nullable:true)
     first_author(nullable:true)
     parent_publication_title_id(nullable:true)
-    preceding_publication_title_id(nullable:true)
     embargo_info(nullable:true)
     coverage_depth(nullable:true)
     publisher_name(nullable:true)
