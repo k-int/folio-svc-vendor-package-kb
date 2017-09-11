@@ -164,7 +164,7 @@ def processFile(official_package_name, link, config, http) {
       package_info.cksum = md5sumHex
       package_info.last_check = System.currentTimeMillis()
 
-      def ts_label = new java.text.SimpleDateFormat('yyyy.MM.dd_HHmmss').format(new Date());
+      def ts_label = new java.text.SimpleDateFormat('yyyy-MM-dd').format(new Date());
 
       // Put package data in cache
       File cache_dir = new File('./package_cache')
@@ -172,7 +172,8 @@ def processFile(official_package_name, link, config, http) {
         cache_dir.mkdir()
       }
 
-      String cached_package_file_name = "./package_cache/${package_id}_${ts_label}".toString()
+      // String cached_package_file_name = "./package_cache/${package_id}_${ts_label}".toString()
+      String cached_package_file_name = "./package_cache/elsevier_Global_${official_package_name}_${ts_label}_${package_id}".toString()
       File cached_package_file = new File(cached_package_file_name)
       package_info.cached_file = cached_package_file_name
 

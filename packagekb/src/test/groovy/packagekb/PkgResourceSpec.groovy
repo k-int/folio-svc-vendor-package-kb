@@ -10,9 +10,4 @@ class PkgResourceSpec extends Specification implements DomainUnitTest<PkgResourc
 
     def cleanup() {
     }
-
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }

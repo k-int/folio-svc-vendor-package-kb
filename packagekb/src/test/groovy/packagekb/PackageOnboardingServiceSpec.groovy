@@ -11,8 +11,4 @@ class PackageOnboardingServiceSpec extends Specification implements ServiceUnitT
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }

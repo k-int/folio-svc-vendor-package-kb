@@ -11,8 +11,4 @@ class SourceSpec extends Specification implements DomainUnitTest<Source> {
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }

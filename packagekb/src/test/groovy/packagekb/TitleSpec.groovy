@@ -11,8 +11,4 @@ class TitleSpec extends Specification implements DomainUnitTest<Title> {
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }

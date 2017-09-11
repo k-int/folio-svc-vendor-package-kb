@@ -11,8 +11,4 @@ class PlatformSpec extends Specification implements DomainUnitTest<Platform> {
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }
