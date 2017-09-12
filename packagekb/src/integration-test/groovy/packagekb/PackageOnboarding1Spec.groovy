@@ -44,7 +44,7 @@ class PackageOnboarding1Spec extends GebSpec {
         then:"The response is correct"
             resp.status == OK.value()
             resp.headers[CONTENT_TYPE] == ['application/json;charset=UTF-8']
-            resp.json.message == 'Welcome to Grails!'
+            resp.json.message == 'OK!'
     }
 
     RestBuilder restBuilder() {

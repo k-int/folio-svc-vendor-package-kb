@@ -15,5 +15,7 @@ class UrlMappings {
         "404"(view: '/notFound')
 
         "/_/tenant"(controller: 'okapi', action:'tenant')
+
+        "/package/$vendor/admin"(controller:'package', action:'admin')
     }
 }
