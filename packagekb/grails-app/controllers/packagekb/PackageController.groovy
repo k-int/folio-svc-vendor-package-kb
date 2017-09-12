@@ -14,6 +14,10 @@ class PackageController {
   def admin() { 
     def result = [:]
     log.debug("packagekb.PackageController::admin ${params.vendor}");
+
+    def file = request.getFile("package_file")
+    log.debug("Got package_file ${file}");
+
     result.message='OK!'
     render result as JSON
   }
