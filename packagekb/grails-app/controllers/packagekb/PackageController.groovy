@@ -5,7 +5,10 @@ import grails.rest.*
 import grails.converters.*
 
 class PackageController {
+
 	static responseFormats = ['json', 'xml']
+
+  def packageOnboardingService
 	
   def index() { 
     log.debug("packagekb.PackageController::index");
@@ -16,9 +19,15 @@ class PackageController {
     log.debug("packagekb.PackageController::admin ${params.vendor}");
 
     def file = request.getFile("package_file")
-    log.debug("Got package_file ${file}");
+    if ( file ) {
+      log.debug("Got package_file ${file} ${file?.contentType} ${file?.getOriginalFilename()} ${file?.class.name}");
+      result.message='OK!'
+      result.job_id = packageOnboardingService.submitOnboardingJob(file.getOriginalFilename(), file.inputStream, params.vendor);
+    }
+    else {
+      result.message="ERROR: package/${provider}/admin must be called with a package_file multipart parameter";
+    }
 
-    result.message='OK!'
     render result as JSON
   }
 }

@@ -46,6 +46,8 @@ dependencies {
     compile "org.hibernate:hibernate-core:5.1.5.Final"
     compile "org.grails.plugins:views-json"
     compile "org.grails.plugins:views-json-templates"
+    compile 'net.sf.opencsv:opencsv:2.0'
+    compile 'commons-io:commons-io:2.5'
     console "org.grails:grails-console"
     profile "org.grails.profiles:rest-api"
     runtime "org.glassfish.web:el-impl:2.1.2-b03"

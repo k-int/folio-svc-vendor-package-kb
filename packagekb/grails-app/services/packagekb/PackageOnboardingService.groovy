@@ -1,6 +1,8 @@
 package packagekb
 
 import grails.gorm.transactions.Transactional
+import org.apache.commons.io.FileUtils
+import au.com.bytecode.opencsv.CSVReader
 
 /**
  *
@@ -14,8 +16,42 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PackageOnboardingService {
 
-  public void validateSourceFile() {
+
+  public String submitOnboardingJob(filename, input_stream, vendor) {
+    log.debug("submitOnboardingJob");
+    def job_id = java.util.UUID.randomUUID().toString()
+
+    // Copy file.inputStream to temporary file
+    def target_file = File.createTempFile("package-upload-${job_id}", ".tmp");
+    FileUtils.copyInputStreamToFile(input_stream, target_file);
+
+    // Now validate
+    log.debug("Copied upload file to temp file, now validate");
   }
+
+  public Map validateSourceFile(File file) {
+    log.debug("validateSourceFile");
+    def result = [:]
+
+    CSVReader r = new CSVReader( new InputStreamReader(file.inputStream, java.nio.charset.Charset.forName('UTF-8') ) )
+    def first = true
+    def broken = false
+    String[] nl=null;
+    while ((nl = r.readNext()) != null && !broken) {
+      if ( first ) {
+        first = false; // Skip header
+      }
+      else {
+      }
+      log.debug("Line ${nl}");
+    }
+
+
+    result.status = true
+    result.errors = []
+    result
+  }
+
 
   public void initialLoad() {
   }
