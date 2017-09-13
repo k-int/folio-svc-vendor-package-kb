@@ -19,7 +19,7 @@ class PackageOnboarding1Spec extends GebSpec {
     def cleanup() {
     }
 
-    void "Test the homepage"() {
+    void "Submit a package"() {
         when:"The home page is requested"
 
             // println("hello\n\n\n");
@@ -39,6 +39,7 @@ class PackageOnboarding1Spec extends GebSpec {
             def resp = restBuilder().post("$baseUrl/package/elsevier/admin") {
               contentType "multipart/form-data"
               package_file = package_file_resource
+              wait = true
             }
 
         then:"The response is correct"

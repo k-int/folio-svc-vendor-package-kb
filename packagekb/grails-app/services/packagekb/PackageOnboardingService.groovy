@@ -3,6 +3,8 @@ package packagekb
 import grails.gorm.transactions.Transactional
 import org.apache.commons.io.FileUtils
 import au.com.bytecode.opencsv.CSVReader
+import static grails.async.Promises.*
+import grails.converters.JSON
 
 /**
  *
@@ -16,17 +18,47 @@ import au.com.bytecode.opencsv.CSVReader
 @Transactional
 class PackageOnboardingService {
 
-
-  public String submitOnboardingJob(filename, input_stream, vendor) {
-    log.debug("submitOnboardingJob");
+  public String submitOnboardingJob(filename, input_stream, vendor, w) {
+    log.debug("submitOnboardingJob(${filename},...,${vendor},${w})");
     def job_id = java.util.UUID.randomUUID().toString()
+
+    JobTracker jt = new JobTracker(jobUuid:job_id, status:'RUNNING', startTime:System.currentTimeMillis()).save(flush:true, failOnError:true);
 
     // Copy file.inputStream to temporary file
     def target_file = File.createTempFile("package-upload-${job_id}", ".tmp");
     FileUtils.copyInputStreamToFile(input_stream, target_file);
 
-    // Now validate
+
+    // We could do task { DomainObj.withNewSession { ... instead if we wanted
+    def p1 = task {
+      def r = null;
+      JobTracker.withNewSession {
+        r=runPackageLoad(job_id, target_file)
+      }
+      r
+    }
+
+    if ( ( p1 != null ) && ( w?.equals('true') ) ) {
+      log.debug("Waiting for promise to complete");
+      waitAll(p1)
+      log.debug("Complete");
+    }
+
+    return job_id
+  }
+
+  private Map runPackageLoad(job_id, package_file) {
+    log.debug("runPackageLoad(${job_id},...)");
+    def result = [:]
     log.debug("Copied upload file to temp file, now validate");
+
+
+    log.debug("runPackageLoad completing -- update tracker");
+    def result_as_str = (result as JSON).toString()
+    JobTracker.executeUpdate('update JobTracker set status=:comp, result=:res where jobUuid = :id',[id:job_id, res:result_as_str, comp:'COMPLETE']);
+    log.debug("runPackageLoad complete");
+
+    return result
   }
 
   public Map validateSourceFile(File file) {

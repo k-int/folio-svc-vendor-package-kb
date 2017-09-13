@@ -17,5 +17,6 @@ class UrlMappings {
         "/_/tenant"(controller: 'okapi', action:'tenant')
 
         "/package/$vendor/admin"(controller:'package', action:'admin')
+        "/job/$id"(controller:'jobStatus', action:'lookup')
     }
 }

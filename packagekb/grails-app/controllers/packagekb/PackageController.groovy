@@ -22,7 +22,7 @@ class PackageController {
     if ( file ) {
       log.debug("Got package_file ${file} ${file?.contentType} ${file?.getOriginalFilename()} ${file?.class.name}");
       result.message='OK!'
-      result.job_id = packageOnboardingService.submitOnboardingJob(file.getOriginalFilename(), file.inputStream, params.vendor);
+      result.job_id = packageOnboardingService.submitOnboardingJob(file.getOriginalFilename(), file.inputStream, params.vendor, params.wait);
     }
     else {
       result.message="ERROR: package/${provider}/admin must be called with a package_file multipart parameter";
