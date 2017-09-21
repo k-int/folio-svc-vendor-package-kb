@@ -173,7 +173,7 @@ def processFile(official_package_name, link, config, http) {
       }
 
       // String cached_package_file_name = "./package_cache/${package_id}_${ts_label}".toString()
-      String cached_package_file_name = "./package_cache/elsevier_Global_${official_package_name}_${ts_label}_${package_id}".toString()
+      String cached_package_file_name = "./package_cache/elsevier_Global_${official_package_name}_${ts_label}_${package_id}".toString().replaceAll('/','_slash_')
       File cached_package_file = new File(cached_package_file_name)
       package_info.cached_file = cached_package_file_name
 
