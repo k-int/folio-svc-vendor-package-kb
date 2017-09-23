@@ -1,11 +1,9 @@
 package packagekb
 
-class Pkg {
+class IdentifierNamespace {
 
-  PartyAppearence vendor
-  String name
+  String value
 
   static constraints = {
   }
-
 }

@@ -1,8 +1,7 @@
 package packagekb
 
-class Pkg {
+class Party {
 
-  PartyAppearence vendor
   String name
 
   static constraints = {
